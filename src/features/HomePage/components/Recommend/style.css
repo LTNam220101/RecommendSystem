@@ -1,0 +1,19 @@
+.seeAll{
+    display: flex;
+    color: #333;
+}
+
+.seeAll svg path{
+    /* display: flex; */
+    stroke: #333;
+}
+
+.seeAll:hover {
+    cursor: pointer;
+    color: #fff;
+}
+
+.seeAll:hover svg path{
+    /* cursor: pointer; */
+    stroke: #fff;
+}

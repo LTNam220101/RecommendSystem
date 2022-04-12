@@ -3,10 +3,33 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './app/store';
+import { createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/styles';
+
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      mobile: 0,
+      lMobile: 400,
+      tablet: 768,
+      laptop: 1024,
+      desktop: 1200,
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
