@@ -28,7 +28,7 @@ export default function SlideShow() {
     slidesToShow: 2,
     slidesToScroll: 1,
     autoplay: false,
-    // indicators: true,
+    indicators: true,
     arrows: false,
     prevArrow: (
       <svg
