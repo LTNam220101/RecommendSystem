@@ -1,16 +1,17 @@
-import React from 'react';
-import { makeStyles } from '@mui/styles';
-import { Box } from '@mui/material';
+import React from "react";
+import { makeStyles } from "@mui/styles";
+import { Box } from "@mui/material";
 
 const useStyles = makeStyles({
   root: {
     // fontFamily: 'Nunito',
+    color: "#ffffff",
   },
 
   container: {
-    display: 'flex',
-    gap: '20px',
-    marginBottom: '20px',
+    display: "flex",
+    gap: "20px",
+    marginBottom: "20px",
   },
 
   footer: {
@@ -18,23 +19,32 @@ const useStyles = makeStyles({
   },
 
   title: {
-    fontSize: '18px',
+    fontSize: "18px",
     fontWeight: 700,
   },
 
   list: {
-    '& ul': {
+    "& ul": {
       padding: 0,
-      '& li': {
-        listStyleType: 'none',
-        margin: '10px 0',
-        '& a': {
-          textDecoration: 'none',
-          color: '#000',
-          fontSize: '14px',
+      "& li": {
+        listStyleType: "none",
+        margin: "10px 0",
+        "& a": {
+          textDecoration: "none",
+          fontSize: "14px",
           fontWeight: 500,
-          '&:hover': {
-            textDecoration: 'underline',
+          "&:hover": {
+            color: "#ffffff",
+            textDecoration: "underline",
+          },
+          "&:link": {
+            color: "#ffffff",
+          },
+          "&:visited": {
+            color: "#ffffff",
+          },
+          "&:active": {
+            color: "#ffffff",
           },
         },
       },
@@ -42,9 +52,9 @@ const useStyles = makeStyles({
   },
 
   address: {
-    '& p': {
+    "& p": {
       margin: 0,
-      fontSize: '14px',
+      fontSize: "14px",
       fontWeight: 500,
     },
   },

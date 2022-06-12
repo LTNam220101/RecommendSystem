@@ -4,12 +4,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import "./Slider.css";
 import { useDispatch } from 'react-redux';
 import { v4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+import { toggleProfile } from '../../Slice';
 // import ListItem from '../ListItem';
 
 const SlideItem = ({ item }) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
   const {img, name, year, rating} = item; 
+  const handleFilm = (id) => {
+    dispatch(toggleProfile())
+    navigate(`/film:${id}`, { replace: true });
+  }
   return (
-    <Box sx={{ position: "relative", backgroundColor: "#000000"}} className="slideItemBA">
+    <Box sx={{ position: "relative", backgroundColor: "#000000"}} className="slideItemBA" onClick={()=>handleFilm(3)}>
       <Box
         sx={{
           position: "absolute",

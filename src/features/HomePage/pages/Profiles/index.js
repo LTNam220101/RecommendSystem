@@ -1,7 +1,8 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { makeStyles, useTheme } from "@mui/styles";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleProfile } from "../../Slice";
 
 const useStyles = makeStyles({
   root: {
@@ -13,14 +14,27 @@ const useStyles = makeStyles({
     backgroundColor: "#333333",
     borderRadius: "20px 0 0 0",
     height: "100%",
-    padding: "20px 0 0 30px"
+    padding: "20px 0 0 30px",
+    display: "flex",
+    transition: "all 0.5s",
+  },
+  button: {
+    marginRight: "20px",
+    "& svg": {
+      cursor: "pointer",
+      transform: (props) => (!props.open ? "rotate(180deg)" : ""),
+      transition: "all 0.5s",
+    },
+    "& svg:hover path": {
+      stroke: "#fff",
+    },
   },
   profiles: {
     display: "flex",
-    color: "#ffffff"
+    color: "#ffffff",
   },
   avatar: {
-    marginRight: "20px"
+    marginRight: "20px",
   },
   user: {
     fontSize: "22px",
@@ -29,20 +43,42 @@ const useStyles = makeStyles({
   mail: {
     fontSize: "14px",
     fontWeight: 300,
-  }
+  },
 });
 
 export default function Profiles() {
   const theme = useTheme();
   const tablet = useMediaQuery(theme.breakpoints.up("tablet"));
-  const classes = useStyles({ tablet });
+  const dispatch = useDispatch();
+  const open = useSelector((state) => state.profile.openProfile);
+  const classes = useStyles({ tablet, open });
+
+  const handleClick = () => {
+    dispatch(toggleProfile());
+  };
   // const cart = useSelector((state) => state.cart.listProduct);
   // const choose = useSelector((state) => state.cart.chooseProduct);
-
   return (
     <Box className={classes.root}>
+      <Box className={classes.button} onClick={handleClick}>
+        <svg
+          width="25"
+          height="25"
+          viewBox="0 0 25 25"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.38506 18.7241L15.3851 12.7241L9.38506 6.72414"
+            stroke="black"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </Box>
       <Box className={classes.profiles}>
-        <Box  className={classes.avatar}>
+        <Box className={classes.avatar}>
           <svg
             width="46"
             height="46"

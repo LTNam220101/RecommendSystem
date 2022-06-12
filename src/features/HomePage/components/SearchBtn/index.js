@@ -3,6 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./styles";
 import logo from "./logo.png";
+import { useDispatch } from "react-redux";
+import { openProfile } from "../../Slice";
 
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
@@ -16,7 +18,7 @@ function HideOnScroll({ children }) {
 export default function SearchBtn() {
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleSearch = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -27,6 +29,7 @@ export default function SearchBtn() {
   };
 
   const goHome = () => {
+    dispatch(openProfile())
     navigate(`/home`, { replace: true });
   }
 

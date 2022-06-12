@@ -9,11 +9,14 @@ import Main from "./pages/Main";
 import Search from "./pages/Search";
 import SearchBtn from "./components/SearchBtn";
 import Footer from "./pages/Footer";
+import Film from "./pages/Film";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles({
   root: {
     backgroundColor: "#0D0D0F",
     width: "100%",
+    transition: "all 0.5s",
   },
   main: {
     padding: "0 40px 40px",
@@ -21,6 +24,7 @@ const useStyles = makeStyles({
 });
 
 export default function HomePage() {
+  const open = useSelector((state) => state.profile.openProfile);
   const theme = useTheme();
   const tablet = useMediaQuery(theme.breakpoints.up("tablet"));
   const classes = useStyles({ tablet });
@@ -38,16 +42,17 @@ export default function HomePage() {
         <Grid item xs={1} display={tablet ? "block" : "none"}>
           <NavBarLeft />
         </Grid>
-        <Grid className={classes.main} item xs={7}>
+        <Grid className={classes.main} item xs={open ? 7 : 10}>
           <SearchBtn />
           <Routes>
             <Route path="" element={<Navigate to="home" />} />
-            <Route path="home" element={<Main />} />
+            <Route path="home" element={<Main />}/>
             <Route path=":search" element={<Search />} />
+            <Route path="film/:id" element={<Film />} />
           </Routes>
           <Footer />
         </Grid>
-        <Grid item xs={4} display={tablet ? "block" : "none"}>
+        <Grid item xs={open ? 4 : 1} display={tablet ? "block" : "none"}>
           <Profiles />
         </Grid>
       </Grid>

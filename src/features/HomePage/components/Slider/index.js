@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Slider.css";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 // import { v4 } from "uuid";
-import slide1 from "./slide1.png";
-import slide2 from "./slide2.png";
-import slide3 from "./slide3.png";
-import {
-  Box,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import SlideItem from "./SlideItem";
+import { useDispatch, useSelector } from "react-redux";
+import { actions } from "./slice";
 
 export default function SlideShow() {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(actions.getItemSliderRequest());
+  }, []);
+  
+  const { dataSlider, loadingSlider } = useSelector((state) => state.slider);
+  console.log(dataSlider);
+
   const style = {
     textAlign: "center",
     fontSize: "30px",
@@ -25,7 +29,7 @@ export default function SlideShow() {
   const properties = {
     duration: 1000,
     transitionDuration: 500,
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: false,
     indicators: true,
@@ -59,43 +63,41 @@ export default function SlideShow() {
       </svg>
     ),
   };
-
   return (
     <div>
-      <Box sx={{ margin: "80px 0 0 0" }}>
-        <Box sx={{ fontSize: "18px", fontWeight: 700, lineHeight: "22px", color: "#ffffff", marginBottom: "20px" }}>
-          Trending movies
-        </Box>
-        <Slide {...properties} className="slide">
-          {dataSlider.map((item) => (
-            <SlideItem
-              key={item.id}
-              src={item.src}
-              text={item.text}
-              sx={style}
-              className="slideItem"
-            />
-          ))}
-        </Slide>
-      </Box>
+      {loadingSlider ? (
+        <div>abc</div>
+      ) : (
+        <div>
+          <Box sx={{ margin: "80px 0 0 0" }}>
+            <Box
+              sx={{
+                fontSize: "18px",
+                fontWeight: 700,
+                lineHeight: "22px",
+                color: "#ffffff",
+                marginBottom: "20px",
+              }}
+            >
+              Trending movies
+            </Box>
+            <Slide {...properties} className="slide">
+              {dataSlider.map((item) => (
+                <SlideItem
+                  key={item.id}
+                  src={`https://image.tmdb.org/t/p/original${item.image}`}
+                  text={item.name}
+                  rating={item.ratingAverage}
+                  views={item.views}
+                  id={item._id}
+                  sx={style}
+                  className="slideItem"
+                />
+              ))}
+            </Slide>
+          </Box>
+        </div>
+      )}
     </div>
   );
 }
-
-const dataSlider = [
-  {
-    id: 1,
-    src: slide1,
-    text: "Doctor Strange 2",
-  },
-  {
-    id: 2,
-    src: slide2,
-    text: "Doctor Strange 2",
-  },
-  {
-    id: 3,
-    src: slide3,
-    text: "Doctor Strange 2",
-  },
-];

@@ -1,10 +1,22 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toggleProfile } from "../../Slice";
 import "./Slider.css";
 
-const SlideItem = ({ src, text }) => {
+const SlideItem = ({ src, text, rating, views, id }) => {
+  const open = useSelector((state) => state.profile.openProfile);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleFilm = (id) => {
+    dispatch(toggleProfile())
+    // dispatch(actions.getItemMovieRequest(id))
+    navigate(`/film/${id}`, { replace: true });
+  }
   return (
-    <Box sx={{ position: "relative", margin: "0 10px" }} className="slideItemB">
+    <Box sx={{ position: "relative", margin: "0 10px" }} className="slideItemB" onClick={()=>handleFilm(id)}>
       <Box
         sx={{
           position: "absolute",
@@ -45,7 +57,7 @@ const SlideItem = ({ src, text }) => {
       <Box
         sx={{
           position: "absolute",
-          top: "60%",
+          top: "80%",
           marginLeft: "20px",
           color: "#ffffff",
           zIndex: 10,
@@ -61,7 +73,7 @@ const SlideItem = ({ src, text }) => {
       >
         <Box
           sx={{
-            fontSize: "16px",
+            fontSize: open ? "16px" : "20px",
             fontWeight: "700",
             // position: "relative",
             // top: "-80px",
@@ -79,11 +91,11 @@ const SlideItem = ({ src, text }) => {
         >
           {text}
         </Box>
-        <Box sx={{ fontSize: "12px" }}>2022</Box>
+        <Box sx={{ fontSize: open ? "12px" : "16px" }}>{views}</Box>
         <Box
           sx={{
             display: "flex",
-            fontSize: "10px",
+            fontSize: open ? "10px" : "14px",
             fontWeight: 500,
             alignItems: "center",
           }}
@@ -130,7 +142,7 @@ const SlideItem = ({ src, text }) => {
               </defs>
             </svg>
           </Box>
-          7.5 rating
+          {rating} rating
         </Box>
       </Box>
     </Box>
