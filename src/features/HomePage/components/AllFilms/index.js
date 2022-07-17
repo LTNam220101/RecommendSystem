@@ -40,40 +40,9 @@ const AllFilms = () => {
             </svg>
           </Box>
         </Box>
-        <ListItem listItem={listItem} api="http://127.0.0.1:8000/combo/" />
+        <ListItem api="http://127.0.0.1:8000/combo/" />
       </Box>
     </div>
   );
 };
-
-const listItem = [
-  { img: item, name: "Doctor Strange 2", year: "2022", rating: "7.5", key: 1 },
-  { img: item, name: "Doctor Strange 2", year: "2022", rating: "7.5", key: 2 },
-  {
-    img: mobius,
-    name: "Doctor Strange 2",
-    year: "2022",
-    rating: "7.5",
-    key: 3,
-  },
-  { img: item, name: "Doctor Strange 2", year: "2022", rating: "7.5", key: 4 },
-  {
-    img: mobius,
-    name: "Doctor Strange 2",
-    year: "2022",
-    rating: "7.5",
-    key: 5,
-  },
-  {
-    img: mobius,
-    name: "Doctor Strange 2",
-    year: "2022",
-    rating: "7.5",
-    key: 6,
-  },
-  { img: item, name: "Doctor Strange 2", year: "2022", rating: "7.5", key: 7 },
-  { img: item, name: "Doctor Strange 2", year: "2022", rating: "7.5", key: 8 },
-  { img: item, name: "Doctor Strange 2", year: "2022", rating: "7.5", key: 9 },
-];
-
 export default AllFilms;

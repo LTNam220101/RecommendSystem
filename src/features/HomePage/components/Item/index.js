@@ -11,13 +11,14 @@ import { toggleProfile } from '../../Slice';
 const SlideItem = ({ item }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const {img, name, year, rating} = item; 
+  console.log(item)
+  const {image, name, views, ratingAverage, _id} = item; 
   const handleFilm = (id) => {
     dispatch(toggleProfile())
-    navigate(`/film:${id}`, { replace: true });
+    navigate(`/film/${id}`, { replace: true });
   }
   return (
-    <Box sx={{ position: "relative", backgroundColor: "#000000"}} className="slideItemBA" onClick={()=>handleFilm(3)}>
+    <Box sx={{ position: "relative", backgroundColor: "#000000"}} className="slideItemBA" onClick={()=>handleFilm(_id)}>
       <Box
         sx={{
           position: "absolute",
@@ -53,7 +54,7 @@ const SlideItem = ({ item }) => {
         </svg>
       </Box>
       <Box>
-        <img src={img} className="slideItemA" />
+        <img src={`https://image.tmdb.org/t/p/original${image}`} className="slideItemA" />
       </Box>
       <Box
         sx={{
@@ -92,7 +93,7 @@ const SlideItem = ({ item }) => {
         >
           {name}
         </Box>
-        <Box sx={{ fontSize: "12px" }}>{year}</Box>
+        <Box sx={{ fontSize: "12px" }}>{views}</Box>
         <Box
           sx={{
             display: "flex",
@@ -143,7 +144,7 @@ const SlideItem = ({ item }) => {
               </defs>
             </svg>
           </Box>
-          {rating} rating
+          {ratingAverage} rating
         </Box>
       </Box>
     </Box>

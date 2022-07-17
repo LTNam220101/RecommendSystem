@@ -72,6 +72,10 @@ const Film = () => {
       console.log(data);
       const data1 = [];
       data.map((item) => {
+        const vid = item.videos.results.find(({ name }) => {
+          return name === "Official Trailer";
+        })
+        const url = vid ? vid.key : "DcCISK3sCYg";
         data1.push({
           categories: item.genres.map((gen) => {
             return gen.name;
@@ -82,23 +86,19 @@ const Film = () => {
           image: item.poster_path,
           voteAverage: item.vote_average,
           voteQuantity: item.vote_count,
-          actors: item.cast.map((actor) => {
+          actors: item.cast.slice(0, 5).map((actor) => {
             return {
               name: actor.name,
               image: actor.profile_path,
             };
           }),
-          directors: item.crew.filter((pp) => {
-            return pp.department === "Directing";
-          }),
-          url: item.videos.results.find(({ name, key }) => {
-            if (name === "Official Trailer") {
-              return key;
-            }return false
-          }),
+          // directors: item.crew.filter((pp) => {
+          //   return pp.department === "Directing";
+          // }),
+          url: url,
         });
       });
-      console.log(data1);
+      console.log(JSON.stringify(data1));
     }
     // getData();
   }, []);

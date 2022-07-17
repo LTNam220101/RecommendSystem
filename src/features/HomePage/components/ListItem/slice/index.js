@@ -5,9 +5,9 @@ import { movieSaga } from './saga';
 // import { ItemDetailProps, ItemDetailState, SellItemId } from './types';
 
 export const initialState = {
-  loadingMovie: false,
-  dataMovie: [],
-  errorMovie: false,
+  loadingListMovie: false,
+  dataListMovie: [],
+  errorListMovie: false,
 
 //   loadingAddView: false,
 //   dataAddView: {},
@@ -18,25 +18,25 @@ export const initialState = {
 //   errorAddLike: false,
 };
 
-const movie = createSlice({
-  name: 'movie',
+const listMovie = createSlice({
+  name: 'listMovie',
   initialState,
   reducers: {
     // get info item
-    getItemMovieRequest(state, action) {
-      state.loadingMovie = true;
-      state.errorMovie = false;
+    getListMovieRequest(state, action) {
+      state.loadingListMovie = true;
+      state.errorListMovie = false;
     },
-    getItemMovieSuccess(state, action) {
-      state.loadingMovie = false;
-      state.dataMovie = action.payload;
+    getListMovieSuccess(state, action) {
+      state.loadingListMovie = false;
+      state.dataListMovie = action.payload;
     },
-    getItemMovieFailed(state, action) {
-      state.loadingMovie = false;
-      state.errorMovie = action.payload;
+    getListMovieFailed(state, action) {
+      state.loadingListMovie = false;
+      state.errorListMovie = action.payload;
     },
 
-    // getItemMovieSellingRequest(state, action) {
+    // getListMovieSellingRequest(state, action) {
     //   state.loadingItemDetail = true;
     //   state.errorItemDetail = false;
     // },
@@ -76,8 +76,8 @@ const movie = createSlice({
   },
 });
 
-export const { actions } = movie;
-export default movie.reducer
+export const { actions } = listMovie;
+export default listMovie.reducer
 // export const useMovieSlice = () => {
 //   return { actions: slice.actions };
 // };

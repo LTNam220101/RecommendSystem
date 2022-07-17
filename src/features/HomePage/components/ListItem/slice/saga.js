@@ -3,17 +3,16 @@ import filmApi from "../../../../../api/filmApi";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { actions } from ".";
 
-function* getMovieSaga(action) {
+function* getListMovieSaga(action) {
   try {
-    console.log(action.payload);
-    const res = yield call(filmApi.getDetail, action.payload);
-    yield put(actions.getItemMovieSuccess(res.data.data));
+    const res = yield call(filmApi.getAll);
+    yield put(actions.getListMovieSuccess(res.data));
     if (res.code === 201) {
-      yield put(actions.getItemMovieFailed(res.message));
+      yield put(actions.getListMovieFailed(res.message));
     }
   } catch (error) {
     console.log(error);
-    yield put(actions.getItemMovieFailed(false));
+    yield put(actions.getListMovieFailed(false));
   }
 }
 
@@ -50,8 +49,8 @@ function* getMovieSaga(action) {
 //   }
 // }
 
-export function* movieSaga() {
-  yield takeLatest(actions.getItemMovieRequest, getMovieSaga);
+export function* listMovieSaga() {
+  yield takeLatest(actions.getListMovieRequest, getListMovieSaga);
   //   yield takeLatest(actions.getItemDetailSellingRequest, getItemDetailSellingSaga);
   //   yield takeLatest(actions.addViewRequest, addViewSaga);
   //   yield takeLatest(actions.addLikeRequest, addLikeSaga);
