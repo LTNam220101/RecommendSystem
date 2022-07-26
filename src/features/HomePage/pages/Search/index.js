@@ -4,51 +4,30 @@ import ListItem from '../../components/ListItem';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import SearchBtn from '../../components/SearchBtn';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions } from '../../components/ListItem/slice';
 
 export default function Search() {
+  const dispatch = useDispatch();
   const { search } = useParams();
-
-  const [pizzaResponse, setPizzaResponse] = useState([]);
-  const [sideResponse, setSideResponse] = useState([]);
-  const [comboResponse, setComboResponse] = useState([]);
-
-  // API
-  const [loading, setLoading] = useState(0);
-  const pizzaSearch = 'http://127.0.0.1:8000/piza/?search=' + search.slice(7);
-  const sideSearch = 'http://127.0.0.1:8000/side/?search=' + search.slice(7);
-  const comboSearch = 'http://127.0.0.1:8000/combo/?search=' + search.slice(7);
-
   useEffect(() => {
-    async function getData() {
-      const responsePizza = await fetch(pizzaSearch);
-      setPizzaResponse(await responsePizza.json());
-      setLoading(1);
+    dispatch(actions.getListMovieRequest({search: search.slice(7)}));
+  }, [search]);
 
-      const responseSide = await fetch(sideSearch);
-      setSideResponse(await responseSide.json());
-      setLoading(2);
-
-      const responseCombo = await fetch(comboSearch);
-      setComboResponse(await responseCombo.json());
-      setLoading(3);
-    }
-
-    getData();
-  }, [comboSearch, pizzaSearch, sideSearch]);
-
-  const data = [...pizzaResponse, ...sideResponse, ...comboResponse];
+  const { dataListMovie, loadingListMovie } = useSelector((state) => state.listMovie);
+  console.log(dataListMovie)
 
   return (
     <div>
       {search.length > 7 && (
         <Box sx={{ mt: "80px" }}>
-          <Box sx={{ mt: 4, mb: 6, textAlign: 'center' }}>
+          <Box sx={{ mt: 4, mb: 6, textAlign: 'center', color: "#fff" }}>
             <Box>Hiển thị kết quả tìm kiếm cho {search.slice(7)}</Box>
-            <Box>Có {data.length} kết quả.</Box>
+            <Box>Có {dataListMovie.length} kết quả.</Box>
           </Box>
-          {loading === 3 ? (
+          {!loadingListMovie ? (
             <>
-              <ListItem listItem={data} />
+              <ListItem listItem={dataListMovie} />
             </>
           ) : (
             <Box style={{ textAlign: 'center' }}>

@@ -1,11 +1,21 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ListItem from "../ListItem";
+import { actions } from "../ListItem/slice";
 import item from "./item.png";
 import mobius from "./mobius.jpg";
 import "./style.css"
 
 const AllFilms = () => {
+  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(actions.getListMovieRequest());
+  }, []);
+
+  const { dataListMovie, loadingListMovie } = useSelector((state) => state.listMovie);
   return (
     <div>
       <Box sx={{ margin: "40px 0 0 0" }}>
@@ -40,7 +50,7 @@ const AllFilms = () => {
             </svg>
           </Box>
         </Box>
-        <ListItem api="http://127.0.0.1:8000/combo/" />
+        <ListItem listItem={dataListMovie} loadingListMovie={loadingListMovie}/>
       </Box>
     </div>
   );

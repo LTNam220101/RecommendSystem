@@ -93,7 +93,7 @@ const SlideItem = ({ item }) => {
         >
           {name}
         </Box>
-        <Box sx={{ fontSize: "12px" }}>{views}</Box>
+        <Box sx={{ fontSize: "12px" }}>{views} Views</Box>
         <Box
           sx={{
             display: "flex",

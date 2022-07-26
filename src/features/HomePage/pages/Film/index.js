@@ -1,22 +1,35 @@
-import { Box, Divider, Link } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, Divider, Link, Rating, Snackbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { actions } from "./sliceItem";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import DownloadIcon from '@mui/icons-material/Download';
 
 const useStyles = makeStyles({
   root: {
     margin: "80px 0 100px 0",
     color: "#ffffff",
   },
-  name: {
+  title: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: "20px",
+  },
+  name: {
     fontSize: "2rem",
     fontWeight: "600",
   },
+  rating: {
+    '& svg': {
+      color: "#ffffff",
+    }
+  }
 });
 
 const Film = () => {
@@ -103,19 +116,79 @@ const Film = () => {
     // getData();
   }, []);
   const { id } = useParams();
-  console.log(id);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.getItemMovieRequest(id));
+    dispatch(actions.resetRating());
+    if(dataLogin){
+      dispatch(actions.getRatingRequest({id, email: dataLogin._id}))
+    }
   }, [id]);
-  const { dataMovie, loadingMovie } = useSelector((state) => state.movie);
+  const { dataMovie, loadingMovie, dataRatingCount, loadingRatingCount } = useSelector((state) => state.movie);
+  const { dataLogin, loadingLogin } = useSelector((state) => state.login);
+  const addRating = (rating) => {
+    dispatch(actions.addRatingRequest({id, rating, email: dataLogin._id}));
+  }
   const classes = useStyles();
+
+  const [isRating, setIsRating] = useState(false); 
+
+  const removeFromFavorites = () => {
+    if(!dataLogin){
+      setOpenAlert(true);
+      return;
+    }
+    dispatch(actions.addFavoriteRequest({id, email: dataLogin.email, history: dataLogin.history}));
+  }
+
+  const navigate = useNavigate();
+
+  const [openAlert, setOpenAlert] = useState(false)
+
+  const download = () => {
+    if(!dataLogin){
+      setOpenAlert(true);
+      return;
+    }
+    setOpen(true);
+  }
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <div>
       {loadingMovie ? (
         <div></div>
       ) : (
         <Box className={classes.root}>
+          <Alert
+            severity="info"
+            sx={{position: 'fixed', top: '30px', zIndex: '10', display: openAlert ? 'block' : 'none'}}
+            action={
+              <Box>
+                <Button color="inherit" size="small" onClick={() => {navigate(`/login`, { replace: true })}}>
+                  Đăng nhập
+                </Button>
+                <Button color="inherit" size="small" onClick={() => {navigate(`/register`, { replace: true })}}>
+                  Đăng ký
+                </Button>
+                <Button color="inherit" size="small" onClick={() => {setOpenAlert(false)}}>
+                  Huỷ
+                </Button>
+              </Box>
+            }
+          >
+            <AlertTitle>Info</AlertTitle>
+            Bạn cần đăng nhập để sử dụng tính năng này
+          </Alert>
           <ReactPlayer
             url={`https://www.youtube.com/watch?v=${dataMovie.url}`}
             width="100%"
@@ -124,7 +197,24 @@ const Film = () => {
             controls={true}
           />
           {/* <Box component="img" src={img} className={classes.video}></Box> */}
-          <Box className={classes.name}>{dataMovie.name}</Box>
+          <Box className={classes.title}>
+            <Box className={classes.name}>
+              {dataMovie.name}    
+            </Box>
+              <Box >
+              {dataLogin && dataLogin.history.includes(dataMovie._id) ?
+                <Box sx={{display: 'flex', alignItems: 'center', gap: '10px', cursor: "pointer"}} onClick={removeFromFavorites}>
+                  <FavoriteIcon />
+                    Xoá khỏi danh sách yêu thích
+                </Box>
+                :
+                <Box sx={{display: 'flex', alignItems: 'center', gap: '10px', cursor: "pointer"}} onClick={removeFromFavorites}>
+                  <FavoriteBorderIcon />
+                  Thêm vào danh sách yêu thích    
+                </Box>
+              }
+              </Box>
+          </Box>
           <Box
             sx={{
               display: "flex",
@@ -132,8 +222,45 @@ const Film = () => {
               margin: "5px 0 5px 0",
             }}
           >
-            <Box>Đánh giá: {dataMovie.ratingAverage}/5</Box>
-            <Box>Lượt đánh giá: {dataMovie.ratingQuantity}</Box>
+            <Box>
+              <Box>Đánh giá: {dataMovie.ratingAverage}/5</Box>
+              <Box>Lượt đánh giá: {dataMovie.ratingQuantity}</Box>
+            </Box>
+            <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px'}}>
+              <Box sx={{
+                  display: 'flex',
+                  alignItems: 'flex-end',
+              }}>Đánh giá của bạn: 
+                <Rating 
+                  defaultValue={dataRatingCount || 0} 
+                  size="small" 
+                  className={classes.rating}
+                  readOnly={dataRatingCount || isRating}
+                  onChange={(event, newValue) => {
+                            if(dataLogin){
+                              addRating(newValue)
+                              setIsRating(true)
+                            }else{
+                              setOpenAlert(true)
+                            }
+                          }
+                }/>
+              </Box>
+              <Box sx={{
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  cursor: 'pointer',
+              }}
+              onClick={download}>
+                <DownloadIcon />
+                Tải phim
+              </Box>
+              <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                  Download Successfully
+                </Alert>
+              </Snackbar>
+            </Box>
           </Box>
           <Box sx={{ marginBottom: "5px", fontSize: "1.2rem" }}>Thông tin</Box>
           <Divider
@@ -146,14 +273,11 @@ const Film = () => {
               dataMovie.actors &&
               dataMovie.actors.map((actor, index) => {
                 return (
-                  <Link key={index} to={`/search/?actor=${actor}`}>
+                  <Link key={index} href={`/search=${actor}`}>
                     {actor},&nbsp;
                   </Link>
                 );
               })}
-          </Box>
-          <Box sx={{ marginBottom: "5px" }}>
-            Đạo diễn: <Link>{dataMovie.director}</Link>
           </Box>
           <Box sx={{ marginBottom: "5px", display: "flex" }}>
             Thể loại:&nbsp;
@@ -161,7 +285,7 @@ const Film = () => {
               dataMovie.categories &&
               dataMovie.categories.map((cate, index) => {
                 return (
-                  <Link key={index} to={`/search/?category=${cate}`}>
+                  <Link key={index} href={`/search=${cate}`}>
                     {cate},&nbsp;
                   </Link>
                 );

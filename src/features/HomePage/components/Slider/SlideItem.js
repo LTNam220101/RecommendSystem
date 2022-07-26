@@ -91,7 +91,7 @@ const SlideItem = ({ src, text, rating, views, id }) => {
         >
           {text}
         </Box>
-        <Box sx={{ fontSize: open ? "12px" : "16px" }}>{views}</Box>
+        <Box sx={{ fontSize: open ? "12px" : "16px" }}>{views} Views</Box>
         <Box
           sx={{
             display: "flex",

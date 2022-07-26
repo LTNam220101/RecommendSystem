@@ -17,10 +17,32 @@ const useStyles = makeStyles({
     backgroundColor: "#0D0D0F",
     width: "100%",
     transition: "all 0.5s",
+    /* width */
+    '&::-webkit-scrollbar': {
+      width: '5px',
+      borderRadius: '10px',
+    },
+
+    /* Track */
+    '&::-webkit-scrollbar-track': {
+      background: '#000',
+    },
+
+    /* Handle */
+    '&::-webkit-scrollbar-thumb': {
+      background: '#DB202C',
+      borderRadius: '10px',
+    },
   },
   main: {
     padding: "0 40px 40px",
   },
+  profile: {
+    position: 'fixed',
+    right: '0',
+    height: '100%',
+    width: '100%',
+  }
 });
 
 export default function HomePage() {
@@ -52,7 +74,7 @@ export default function HomePage() {
           </Routes>
           <Footer />
         </Grid>
-        <Grid item xs={open ? 4 : 1} display={tablet ? "block" : "none"}>
+        <Grid item xs={open ? 4 : 1} display={tablet ? "block" : "none"} className={classes.profile}>
           <Profiles />
         </Grid>
       </Grid>

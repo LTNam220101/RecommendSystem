@@ -4,8 +4,10 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { actions } from "../features/Login/sliceLogin";
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 const useStyles = makeStyles({
   navList: {
@@ -76,6 +78,7 @@ export default function NavBarLeft() {
   const [isActive, setIsActive] = useState(1);
   const navigate = useNavigate();
   const tokenUser = localStorage.getItem("tokenHUST") || "";
+  const { dataLogin, loadingLogin } = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
   const handleNav = (link, id) => {
@@ -84,11 +87,13 @@ export default function NavBarLeft() {
   };
 
   const handleLogin = () => {
-    if (!tokenUser) {
-      navigate("/login", { replace: true });
+    if (dataLogin) {
+      dispatch(actions.logout());
     } else {
-      navigate("/home", { replace: true });
+      navigate("/login", { replace: true });
+      // navigate("/home", { replace: true });
     }
+    console.log(dataLogin)
   };
 
   return (
@@ -108,7 +113,11 @@ export default function NavBarLeft() {
 
       <Divider variant="middle" flexItem sx={{ mt: "10px", mb: "10px" }} />
 
-      <ListItem className={classes.navIcon} onClick={handleLogin}></ListItem>
+      <ListItem className={classes.navIcon} onClick={handleLogin}>
+        <LogoutOutlinedIcon
+          sx={{ fontSize: 30, transform: dataLogin ? 'rotate(180deg)' : '' }}
+        />
+      </ListItem>
     </List>
   );
 }

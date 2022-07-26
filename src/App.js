@@ -8,6 +8,8 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Route, Routes } from 'react-router';
 import HomePage from './features/HomePage';
+import Login from './features/Login';
+import Register from './features/Register';
 
 const useStyles = makeStyles({
   root: {},
@@ -20,9 +22,9 @@ function App() {
     <div className={classes.root}>
       <Routes>
         <Route path="/*" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         {/* <Route path="/pay" element={} />
-        <Route path="/login" element={} />
-        <Route path="/register" element={} />
         <Route path="/personal" element={} />
         <Route path="/success" element={} /> */}
       </Routes>

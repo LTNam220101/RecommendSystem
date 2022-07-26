@@ -9,13 +9,17 @@ export const initialState = {
   dataMovie: [],
   errorMovie: false,
 
-//   loadingAddView: false,
-//   dataAddView: {},
-//   errorAddView: false,
+  loadingRating: false,
+  dataRating: [],
+  errorRating: false,
 
-//   loadingAddLike: false,
-//   dataAddLike: {},
-//   errorAddLike: false,
+  loadingFavorite: false,
+  dataFavorite: [],
+  errorFavorite: false,
+
+  loadingRatingCount: false,
+  dataRatingCount: 0,
+  errorRatingCount: false,
 };
 
 const movie = createSlice({
@@ -36,43 +40,50 @@ const movie = createSlice({
       state.errorMovie = action.payload;
     },
 
-    // getItemMovieSellingRequest(state, action) {
-    //   state.loadingItemDetail = true;
-    //   state.errorItemDetail = false;
-    // },
-
-    // // add view
-    // addViewRequest(state, action) {
-    //   state.loadingAddView = true;
-    //   state.errorAddView = false;
-    // },
-    // addViewSuccess(state, action) {
-    //   state.loadingAddView = false;
-    //   state.dataAddView = action.payload;
-    //   if (state.dataItemDetail.views) {
-    //     state.dataItemDetail.views = action.payload.views;
-    //   }
-    // },
-    // addViewFailed(state) {
-    //   state.loadingAddView = false;
-    //   state.errorAddView = true;
-    // },
+    // // add like
+    addRatingRequest(state, action) {
+      state.loadingRating = true;
+      state.errorRating = false;
+    },
+    addRatingSuccess(state, action) {
+      state.loadingRating = false;
+      state.dataRating = action.payload;
+    },
+    addRatingFailed(state) {
+      state.loadingRating = false;
+      state.errorRating = true;
+    },
 
     // // add like
-    // addLikeRequest(state, action) {
-    //   state.loadingAddLike = true;
-    //   state.errorAddLike = false;
-    // },
-    // addLikeSuccess(state, action) {
-    //   state.loadingAddLike = false;
-    //   state.dataAddLike = action.payload;
-    //   state.dataItemDetail.favorites = action.payload.favorites;
-    //   state.dataItemDetail.is_favorites = action.payload.is_favorites;
-    // },
-    // addLikeFailed(state) {
-    //   state.loadingAddLike = false;
-    //   state.errorAddLike = true;
-    // },
+    addFavoriteRequest(state, action) {
+      state.loadingFavorite = true;
+      state.errorFavorite = false;
+    },
+    addFavoriteSuccess(state, action) {
+      state.loadingFavorite = false;
+      state.dataFavorite = action.payload;
+    },
+    addFavoriteFailed(state) {
+      state.loadingFavorite = false;
+      state.errorFavorite = true;
+    },
+
+    // // add like
+    getRatingRequest(state, action) {
+      state.loadingRatingCount = true;
+      state.errorRatingCount = false;
+    },
+    getRatingSuccess(state, action) {
+      state.loadingRatingCount = false;
+      state.dataRatingCount = action.payload;
+    },
+    getRatingFailed(state) {
+      state.loadingRatingCount = false;
+      state.errorRatingCount = true;
+    },
+    resetRating(state) {
+      state.dataRatingCount = 0;
+    },
   },
 });
 

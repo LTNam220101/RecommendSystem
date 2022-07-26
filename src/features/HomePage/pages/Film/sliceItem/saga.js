@@ -2,6 +2,8 @@
 import filmApi from "../../../../../api/filmApi";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { actions } from ".";
+import { actions as loginActions } from '../../../../Login/sliceLogin' 
+import userApi from "../../../../../api/userApi";
 
 function* getMovieSaga(action) {
   try {
@@ -17,42 +19,49 @@ function* getMovieSaga(action) {
   }
 }
 
-// function* getItemDetailSellingSaga(action) {
-//   try {
-//     const res = yield call(filmApi.getItemSelling, action.payload);
-//     yield put(actions.getItemDetailSuccess(res.results));
-//     if (res.code === 201 || res.code === 203) {
-//       yield put(actions.getItemDetailFailed(res.message));
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     yield put(actions.getItemDetailFailed(false));
-//   }
-// }
+function* addRatingSaga(action) {
+  try {
+    console.log(action.payload);
+    const res = yield call(filmApi.addRating, action.payload);
+    console.log(res)
+    yield put(actions.addRatingSuccess(res));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.addRatingFailed());
+  }
+}
 
-// function* addViewSaga(action) {
-//   try {
-//     const res = yield call(filmApi.addView, action.payload);
-//     yield put(actions.addViewSuccess(res.results));
-//   } catch (error) {
-//     console.log(error);
-//     yield put(actions.addViewFailed());
-//   }
-// }
+function* addFavoriteSaga(action) {
+  try {
+    console.log(action.payload);
+    const { id, email, history } = action.payload;
+    const res = yield call(userApi.addToFavorites, { id, email });
+    yield put(loginActions.getLoginSuccess(res.data.data));
+    yield put(actions.addFavoriteSuccess(res.data.data));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.addFavoriteFailed());
+  }
+}
 
-// function* addLikeSaga(action) {
-//   try {
-//     const res = yield call(filmApi.addLike, action.payload);
-//     yield put(actions.addLikeSuccess(res.results));
-//   } catch (error) {
-//     console.log(error);
-//     yield put(actions.addLikeFailed());
-//   }
-// }
+function* getRatingSaga(action) {
+  try {
+    console.log(action.payload);
+    const res = yield call(filmApi.getRating, action.payload);
+    console.log(res)
+    yield put(actions.getRatingSuccess(res.data.data.rating));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.getRatingFailed());
+  }
+}
+
 
 export function* movieSaga() {
   yield takeLatest(actions.getItemMovieRequest, getMovieSaga);
   //   yield takeLatest(actions.getItemDetailSellingRequest, getItemDetailSellingSaga);
   //   yield takeLatest(actions.addViewRequest, addViewSaga);
-  //   yield takeLatest(actions.addLikeRequest, addLikeSaga);
+  yield takeLatest(actions.addRatingRequest, addRatingSaga);
+  yield takeLatest(actions.addFavoriteRequest, addFavoriteSaga);
+  yield takeLatest(actions.getRatingRequest, getRatingSaga);
 }

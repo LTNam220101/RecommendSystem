@@ -5,7 +5,7 @@ import { actions } from ".";
 
 function* getListMovieSaga(action) {
   try {
-    const res = yield call(filmApi.getAll);
+    const res = yield call(filmApi.getAll, action.payload);
     yield put(actions.getListMovieSuccess(res.data));
     if (res.code === 201) {
       yield put(actions.getListMovieFailed(res.message));
